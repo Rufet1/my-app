@@ -20,6 +20,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd my-react-app
+          git remote set-url origin https://github.com/Rufet1/my-app.git
           git pull origin main
           docker build -t my-react-app .
           docker stop react-container || true
