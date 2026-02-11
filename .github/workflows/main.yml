@@ -22,7 +22,6 @@ jobs:
           cd my-app
           git remote set-url origin https://github.com/Rufet1/my-app.git
           git pull origin main
-          docker build -t my-react-app .
-          docker stop react-container || true
-          docker rm react-container || true
-          docker run -d -p 80:80 --name react-container my-react-app
+          docker-compose down
+          docker-compose build
+          docker-compose up -d
