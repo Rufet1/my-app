@@ -1,19 +1,27 @@
-version: '3.8'
+name: CI/CD Pipeline
 
-services:
-  nginx:
-    build: .
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    restart: unless-stopped
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
     
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Deploy to server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd my-app
+          git remote set-url origin https://github.com/Rufet1/my-app.git
+          git pull origin main
+          docker-compose down
+          docker-compose build
+          docker-compose up -d
