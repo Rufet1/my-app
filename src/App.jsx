@@ -499,7 +499,7 @@ function App() {
       <aside className="sidebar">
         <div className="sidebar-header">
           <h1 className="app-title">React Patterns</h1>
-          <p className="app-subtitle">8 Advanced Patterns</p>
+          <p className="app-subtitle">Advanced Patterns</p>
         </div>
 
         <div className="patterns-list">
